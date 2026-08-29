@@ -1,6 +1,12 @@
-# Basic calculator program with repeat capability
+while True:
+    try:
+        num1 = float(input("Enter the first number: "))
+        num2 = float(input("Enter the second number: "))
+        operation = input("Choose an operation (+, -, *, /) or 'q' to quit: ")
 
-whpython3 -
+        if operation == 'q':
+            print("Goodbye!")
+            break
 
         if operation == '+':
             result = num1 + num2
@@ -20,4 +26,4 @@ whpython3 -
         print(f"Result: {result}")
 
     except ValueError:
-        print("Error: Please enter valid numbers.")
+        print("Error: Please enter valid numbers.")bers")
