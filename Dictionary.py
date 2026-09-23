@@ -14,4 +14,5 @@ print (country_capitals["England"])
 
 print("Germany" in country_capitals)  # Output: True
 
-print("Spain" not in country_capitals) 
+print("Spain" not in country_capitals)
+
