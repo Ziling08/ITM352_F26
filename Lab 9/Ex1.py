@@ -1,0 +1,1 @@
+file_object = open("name.txt", "r")
