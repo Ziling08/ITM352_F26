@@ -1,0 +1,118 @@
+
+# Save my Cat Quiz questions to a JSON file
+
+import json
+
+questions = {
+    "Which TWO body parts do cats often use to communicate their feelings?": {
+        "options": [
+            "Whiskers",
+            "Tail",
+            "Ears",
+            "Paws",
+            "Nose"
+        ],
+        "answers": [
+            "Whiskers",
+            "Tail"
+        ],
+        "fact": "Cats often use their whiskers and tail to show how they feel and to communicate with people and other cats."
+    },
+    "Which TWO foods should cats NOT eat?": {
+        "options": [
+            "Chocolate",
+            "Plain Cooked Fish",
+            "Commercial cat food",
+            "Plain cooked chicken",
+            "Onions"
+        ],
+        "answers": [
+            "Chocolate",
+            "Onions"
+        ],
+        "fact": "Chocolate and onions are toxic to cats and can make them very sick."
+    },
+    "Which body part helps cats sense nearby objects and narrow spaces?": {
+        "options": [
+            "Whiskers",
+            "Tail",
+            "Ears",
+            "Paws"
+        ],
+        "answers": [
+            "Whiskers"
+        ],
+        "fact": "Whiskers help cats sense nearby objects and navigate tight or narrow spaces safely."
+    },
+    "Which of these can be signs that a cat feels scared or uncomfortable? (Choose TWO)": {
+        "options": [
+            "Hissing",
+            "Relaxed body posture",
+            "Play with toys",
+            "Ears flattened back"
+        ],
+        "answers": [
+            "Hissing",
+            "Ears flattened back"
+        ],
+        "fact": "Hissing and flattened ears are common signs that a cat feels scared, threatened, or uncomfortable."
+    },
+    "Which two behaviors may show that a cat trusts you?": {
+        "options": [
+            "Slow blinking at you",
+            "Head rubbing",
+            "swatting at you",
+            "Hissing"
+        ],
+        "answers": [
+            "Slow blinking at you",
+            "Head rubbing"
+        ],
+        "fact": "Slow blinking and head rubbing are gentle signs that a cat feels safe and comfortable with you."
+    },
+    "Why do cats often scratch furniture or scratching posts? (Choose Two)": {
+        "options": [
+            "To mark their territory",
+            "To sharpen their claws",
+            "To make their fur longer",
+            "For fun",
+            "To relieve stress"
+        ],
+        "answers": [
+            "To mark their territory",
+            "To sharpen their claws"
+        ],
+        "fact": "Cats scratch to mark territory and keep their claws healthy and sharp."
+    },
+    "What might a cat's slow blink mean when it feels relaxed?": {
+        "options": [
+            "Trust and affection",
+            "Hunger",
+            "Fear",
+            "Curiosity"
+        ],
+        "answers": [
+            "Trust and affection"
+        ],
+        "fact": "A slow blink is often a sign of trust and affection when a cat feels calm and relaxed."
+    },
+    "How many hours do cats typically sleep in a day?": {
+        "options": [
+            "12-14 hours",
+            "14-16 hours",
+            "16-18 hours",
+            "18-20 hours"
+        ],
+        "answers": [
+            "12-14 hours"
+        ],
+        "fact": "Cats usually sleep around 12 to 14 hours a day, and some cats sleep even longer."
+    }
+}
+
+filename = "quiz_questions.json"
+
+with open(filename, "w") as file:
+    json.dump(questions, file, indent=2)
+
+print(f"Quiz questions saved to {filename}")
