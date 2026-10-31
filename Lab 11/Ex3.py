@@ -1,5 +1,5 @@
 # Create a dataframe from a CSV file and create a pivot table aggregating sales by region and order_type.
-# Name: Rick Kazman
+# Name: Ziling He
 # Date: Oct. 30, 2026
 
 import pandas as pd
@@ -10,7 +10,7 @@ import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
 # Tell Pandas to print all columns when displaying a DataFrame
 pd.set_option('display.max_columns', None)
-pd.set_option('display.float_format', '{:.2f}'.format)  # Format float numbers to 2 decimal places
+pd.set_option('display.float_format', '${:,.2f}'.format)  # Format float numbers to 2 decimal places
 
 
 csv_file = 'https://drive.google.com/uc?id=1ujY0WCcePdotG2xdbLyeECFW9lCJ4t-K&export=download'
@@ -21,6 +21,8 @@ try:
     # print(df.head())
 
     # Calculate sales total per row, for later use in the pivot table.
+    df['quantity'] = pd.to_numeric(df['quantity'], errors='coerce')
+    df['unit_price'] = pd.to_numeric(df['unit_price'], errors='coerce')
     df['sales'] = df['quantity'] * df['unit_price']
 
     # Create a pivot table aggregating sales by region and order_type
@@ -28,9 +30,9 @@ try:
                                  values='sales',
                                  index='customer_state',
                                  columns=['customer_type', 'order_type'],
-                                 aggfunc="mean",
+                                 aggfunc=[np.sum, np.mean],
                                  margins=True,
-                                 margins_name='Avg Sales')
+                                 margins_name='All')
 
     print(pivot_table)
 

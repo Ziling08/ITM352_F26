@@ -16,7 +16,9 @@ try:
     print(df.head())
 
     #calculate the sales total pre row
-    df['sales_total'] = df['quantity'] * df['unit_price']
+    df['quantity'] = pd.to_numeric(df['quantity'], errors='coerce')
+    df['unit_price'] = pd.to_numeric(df['unit_price'], errors='coerce')
+    df['sales'] = df['quantity'] * df['unit_price']
 
      # Create a pivot table aggregating sales by region and order_type
     pivot_table = pd.pivot_table(df,
