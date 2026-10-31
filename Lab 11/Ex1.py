@@ -1,7 +1,13 @@
 import pandas as pd
-csv_file="https://drive.google.com/file/d/1ujY0WCcePdotG2xdbLyeECFW9lCJ4t-K"
+import ssl
 
-df= pd.read_csv(csv_file)
-print(df.head())
+csv_file = 'https://drive.google.com/uc?id=1ujY0WCcePdotG2xdbLyeECFW9lCJ4t-K'
+#Temporary fix
+ssl._create_default_https_context = ssl._create_unverified_context
 
-except
+
+try:
+    df = pd.read_csv(csv_file,engine='pyarrow',on_bad_lines='skip')
+    print(df.head())
+except Exception as e:
+    print("Error reading the CSV file:", e)

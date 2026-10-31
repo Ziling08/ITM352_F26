@@ -9,9 +9,11 @@ print(homes_df.head())
 shape = homes_df.shape
 print("The dimensions of the dataframe are: ", shape)
 
-df_big = homes_df[homes_df['units']>= 500]
-df_big = df_big.drop(columns=['units'])
+# Only keep properties with more than 500 units and drop the easement column
+df_big = homes_df[homes_df['units'] >= 500]
+df_big= df_big.drop(columns=['easement'])
 print(df_big.head(10))
+
 
 #Look at the data type
 print(df_big.info())
