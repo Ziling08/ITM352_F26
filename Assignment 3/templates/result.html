@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!-- Results page. I used ChatGPT to help show the score and answer review. -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quiz Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<main>
+    {% if summary['reason'] == 'timeout' %}
+        <h1>Time's up!</h1>
+        <p>The time limit was reached. This quiz has ended.</p>
+    {% else %}
+        <h1>Quiz Completed!</h1>
+        <p>Last answer: {{ review[-1]['status'] }}. Points: {{ review[-1]['points'] }}.</p>
+    {% endif %}
+    <h2>Your final score: {{ summary['score'] }} / {{ summary['max_score'] }}</h2>
+    <p>Correct: {{ summary['correct'] }}</p>
+    <p>Incorrect: {{ summary['incorrect'] }}</p>
+    <p>Unanswered: {{ summary['unanswered'] }}</p>
+    <p>Total time: {{ summary['seconds'] }} seconds</p>
+    <p class="small">Total time includes reading feedback between questions.</p>
+    <p class="success">Your result has been saved to your history.</p>
+
+    {% if summary['score'] >= 60 %}
+        <h2>You're a Cat Expert!</h2>
+    {% elif summary['score'] >= 35 %}
+        <h2>You're a Cat Lover!</h2>
+    {% else %}
+        <h2>Keep learning about cats!</h2>
+    {% endif %}
+
+    <h2>What to review</h2>
+    {% if summary['incorrect'] == 0 and summary['unanswered'] == 0 %}
+        <p>You answered every question correctly. Try another quiz for more practice!</p>
+    {% else %}
+        <p>Focus on these questions and their facts in the review below:</p>
+        <ul>
+        {% for item in review %}
+            {% if item['status'] != 'Correct' %}
+                <li>{{ item['question'] }}</li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+        {% if summary['unanswered'] > 0 %}
+            <p>Try Practice mode to learn the questions without a deadline.</p>
+        {% endif %}
+    {% endif %}
+
+    <!-- Let the player read the questions and correct answers again. -->
+    <h2>Question Review</h2>
+    {% for item in review %}
+        <section class="review">
+            <h3>{{ loop.index }}. {{ item['question'] }}</h3>
+            <p><strong>{{ item['status'] }}</strong> - {{ item['points'] }} points</p>
+            {% if item['chosen'] %}
+                <p>Your answer: {{ item['chosen']|join(', ') }}</p>
+            {% else %}
+                <p>Your answer: Not answered</p>
+            {% endif %}
+            <p>Correct answers: {{ item['answers']|join(', ') }}</p>
+            <p>Cat Fun Fact: {{ item['fact'] }}</p>
+        </section>
+    {% endfor %}
+    <p><a href="/">Back to Home / Play Again</a></p>
+</main>
+</body>
+</html>

@@ -1,0 +1,114 @@
+{
+    "Which TWO body parts do cats often use to communicate their feelings?": {
+        "options": [
+            "Whiskers",
+            "Tail",
+            "Wings",
+            "Horns",
+            "Antlers"
+        ],
+        "answers": [
+            "Whiskers",
+            "Tail"
+        ],
+        "fact": "Cats often use their whiskers and tail to show how they feel and to communicate with people and other cats.",
+        "topic": "Body language"
+    },
+    "Which TWO foods should cats NOT eat?": {
+        "options": [
+            "Chocolate",
+            "Plain Cooked Fish",
+            "Commercial cat food",
+            "Plain cooked chicken",
+            "Onions"
+        ],
+        "answers": [
+            "Chocolate",
+            "Onions"
+        ],
+        "fact": "Chocolate and onions are toxic to cats and can make them very sick.",
+        "topic": "Food safety"
+    },
+    "Which body part helps cats sense nearby objects and narrow spaces?": {
+        "options": [
+            "Whiskers",
+            "Tail",
+            "Ears",
+            "Paws"
+        ],
+        "answers": [
+            "Whiskers"
+        ],
+        "fact": "Whiskers help cats sense nearby objects and navigate tight or narrow spaces safely.",
+        "topic": "Cat senses"
+    },
+    "Which of these can be signs that a cat feels scared or uncomfortable? (Choose TWO)": {
+        "options": [
+            "Hissing",
+            "Relaxed body posture",
+            "Play with toys",
+            "Ears flattened back"
+        ],
+        "answers": [
+            "Hissing",
+            "Ears flattened back"
+        ],
+        "fact": "Hissing and flattened ears are common signs that a cat feels scared, threatened, or uncomfortable.",
+        "topic": "Body language"
+    },
+    "Which two behaviors may show that a cat trusts you?": {
+        "options": [
+            "Slow blinking at you",
+            "Head rubbing",
+            "swatting at you",
+            "Hissing"
+        ],
+        "answers": [
+            "Slow blinking at you",
+            "Head rubbing"
+        ],
+        "fact": "Slow blinking and head rubbing are gentle signs that a cat feels safe and comfortable with you.",
+        "topic": "Trust and affection"
+    },
+    "Why do cats often scratch furniture or scratching posts? (Choose Two)": {
+        "options": [
+            "To mark their territory",
+            "To sharpen their claws",
+            "To make their fur longer",
+            "To change their eye color",
+            "To grow new teeth"
+        ],
+        "answers": [
+            "To mark their territory",
+            "To sharpen their claws"
+        ],
+        "fact": "Cats scratch to mark territory and keep their claws healthy and sharp.",
+        "topic": "Scratching"
+    },
+    "What might a cat's slow blink mean when it feels relaxed?": {
+        "options": [
+            "Trust and affection",
+            "Hunger",
+            "Fear",
+            "Curiosity"
+        ],
+        "answers": [
+            "Trust and affection"
+        ],
+        "fact": "A slow blink is often a sign of trust and affection when a cat feels calm and relaxed.",
+        "topic": "Trust and affection"
+    },
+    "How many hours do cats typically sleep in a day?": {
+        "options": [
+            "2-4 hours",
+            "6-8 hours",
+            "12-18 hours",
+            "22-24 hours"
+        ],
+        "answers": [
+            "12-18 hours"
+        ],
+        "fact": "Domestic cats sleep approximately 12 to 18 hours a day. Age and activity can affect how long a cat sleeps.",
+        "topic": "Sleep"
+    }
+}

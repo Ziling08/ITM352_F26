@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!-- AI assistance: ChatGPT helped add answer feedback and a countdown. -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cat Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<main>
+    <h1>Cat Quiz</h1>
+    <p>Question {{ question_number + 1 }} of {{ total_questions }}</p>
+    <p>Total score: {{ session.get('score', 0) }}</p>
+
+    {% if session['mode'] == 'challenge' and not answered %}
+        <p id="timer" data-remaining="{{ remaining }}">Time remaining: <strong id="seconds">...</strong> seconds</p>
+        <noscript><p>Enable JavaScript for the live countdown. Python still checks the time limit when you submit or return.</p></noscript>
+    {% endif %}
+
+    <h2>{{ question }}</h2>
+    <p>Please choose {{ answer_count }} answer(s).</p>
+
+    <form method="post" id="answer-form" data-answer-count="{{ answer_count }}">
+        <fieldset {% if answered %}disabled{% endif %}>
+            <legend>Answer choices</legend>
+            {% for option in options %}
+                <label class="option">
+                    {% if answer_count == 1 %}
+                        <input type="radio" name="answer" value="{{ option }}" {% if option in selected %}checked{% endif %}>
+                    {% else %}
+                        <input type="checkbox" name="answer" value="{{ option }}" {% if option in selected %}checked{% endif %}>
+                    {% endif %}
+                    {{ option }}
+                </label>
+            {% endfor %}
+        </fieldset>
+        {% if not answered %}<button type="submit">Submit Answer</button>{% endif %}
+    </form>
+
+    <p id="message" role="status">{{ message }}</p>
+    {% if answered %}
+        <p>Points for this question: {{ points }}</p>
+        {% if points == 15 %}<p class="success">Speed bonus! +5 points</p>{% endif %}
+        <p><strong>Cat Fun Fact:</strong> {{ fact }}</p>
+        <p class="small">Your answer is saved. The next timer starts when you click Next Question.</p>
+        <form action="/next" method="post">
+            <button type="submit">Next Question</button>
+        </form>
+    {% endif %}
+
+    <p><a href="/">Back to Home</a></p>
+</main>
+{% if not answered %}<script src="{{ url_for('static', filename='timer.js') }}" defer></script>{% endif %}
+</body>
+</html>

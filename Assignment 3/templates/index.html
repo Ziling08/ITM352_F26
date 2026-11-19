@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!-- Home page. I used ChatGPT to help with the HTML. -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cat Knowledge Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<main>
+    <h1>Welcome to the Cat Knowledge Quiz!</h1>
+    <p>Let's see how much you know about cats!</p>
+
+    {% if message %}
+        <p class="error" role="alert">{{ message }}</p>
+    {% endif %}
+
+    <!-- Ask for a name on the first visit. -->
+    {% if not session.get('name') %}
+        <form method="post">
+            <label for="name">Your name:</label>
+            <input id="name" type="text" name="name" maxlength="30" required autocomplete="given-name">
+            <button type="submit">Save My Name</button>
+        </form>
+    {% else %}
+        <h2>Welcome back, {{ session['name'] }}!</h2>
+        <p>Your name is remembered in this browser. Personal best: {{ best_score }} / 75.</p>
+        <ul>
+            <li>Each quiz has 5 random questions.</li>
+            <li>Correct answer: 10 points. Correct within 5 seconds: 5 bonus points.</li>
+            <li>Challenge mode: {{ time_limit }} seconds per question. Time running out ends the whole quiz.</li>
+            <li>Practice mode: no time limit. Maximum score in either mode: 75.</li>
+        </ul>
+        <form action="/start" method="post">
+            <label for="mode">Choose a mode:</label>
+            <select id="mode" name="mode">
+                <option value="challenge">Challenge</option>
+                <option value="practice">Practice</option>
+            </select>
+            <button type="submit">Start Quiz</button>
+        </form>
+        {% if session.get('quiz_id') and not session.get('finished') %}
+            <p><a href="/quiz">Continue My Quiz</a></p>
+            <p class="small">Starting a new quiz replaces your unfinished game. A running question timer continues while you are on this page.</p>
+        {% endif %}
+
+        <!-- Show the player's scores from previous games. -->
+        <h2>Your Score History</h2>
+        {% if history %}
+            <div class="table-scroll">
+            <table>
+                <caption>Completed quizzes, newest first</caption>
+                <thead><tr><th scope="col">Date (UTC)</th><th scope="col">Mode</th><th scope="col">Score</th><th scope="col">Correct</th><th scope="col">Time</th><th scope="col">Result</th></tr></thead>
+                <tbody>
+                {% for record in history %}
+                    <tr>
+                        <td>{{ record['date'] }}</td>
+                        <td>{{ record['mode'] }}</td>
+                        <td>{{ record['score'] }} / {{ record['max_score'] }}</td>
+                        <td>{{ record['correct'] }}</td>
+                        <td>{{ record['seconds'] }} seconds</td>
+                        <td>{{ record['reason'] }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        {% else %}
+            <p>No scores yet. Complete your first quiz!</p>
+        {% endif %}
+    {% endif %}
+</main>
+</body>
+</html>
