@@ -1,0 +1,58 @@
+[
+    {
+        "quiz_id": "7114e2753eff4df8ff26e3ed225a5512",
+        "user_id": "659c40a747122907c7d379aedd43a371",
+        "name": "z",
+        "score": 45,
+        "max_score": 75,
+        "correct": 4,
+        "incorrect": 1,
+        "unanswered": 0,
+        "seconds": 38.25,
+        "mode": "practice",
+        "reason": "completed",
+        "date": "2026-11-19 01:47 UTC"
+    },
+    {
+        "quiz_id": "1f1f9e29d24e750c3ba2576a17d7e62b",
+        "user_id": "659c40a747122907c7d379aedd43a371",
+        "name": "z",
+        "score": 0,
+        "max_score": 75,
+        "correct": 0,
+        "incorrect": 0,
+        "unanswered": 5,
+        "seconds": 20.0,
+        "mode": "challenge",
+        "reason": "timeout",
+        "date": "2026-11-19 01:48 UTC"
+    },
+    {
+        "quiz_id": "2d133252f0aea06940771185dd367ced",
+        "user_id": "659c40a747122907c7d379aedd43a371",
+        "name": "z",
+        "score": 0,
+        "max_score": 75,
+        "correct": 0,
+        "incorrect": 1,
+        "unanswered": 4,
+        "seconds": 35.4,
+        "mode": "challenge",
+        "reason": "timeout",
+        "date": "2026-11-19 01:55 UTC"
+    },
+    {
+        "quiz_id": "e1b49121cb1c52ca1a4e6a646bef0a8c",
+        "user_id": "659c40a747122907c7d379aedd43a371",
+        "name": "z",
+        "score": 40,
+        "max_score": 75,
+        "correct": 3,
+        "incorrect": 2,
+        "unanswered": 0,
+        "seconds": 35.45,
+        "mode": "challenge",
+        "reason": "completed",
+        "date": "2026-11-19 07:38 UTC"
+    }
+]

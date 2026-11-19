@@ -13,9 +13,12 @@
     <p>Question {{ question_number + 1 }} of {{ total_questions }}</p>
     <p>Total score: {{ session.get('score', 0) }}</p>
 
-    {% if session['mode'] == 'challenge' and not answered %}
-        <p id="timer" data-remaining="{{ remaining }}">Time remaining: <strong id="seconds">...</strong> seconds</p>
-        <noscript><p>Enable JavaScript for the live countdown. Python still checks the time limit when you submit or return.</p></noscript>
+   {% if session['mode'] == 'challenge' and not answered %}
+    <p id="timer" data-remaining="{{ remaining }}">
+        Time remaining:
+        <strong id="seconds">{{ remaining | round(0, 'ceil') | int }}</strong>
+        seconds
+    </p>
     {% endif %}
 
     <h2>{{ question }}</h2>

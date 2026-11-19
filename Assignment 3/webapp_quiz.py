@@ -1,11 +1,9 @@
-
 import json
 import os
 import random
 import secrets
 import time
-from datetime import datetime, timedelta, timezone
-from pathlib import Path
+from datetime import timedelta
 from flask import Flask, render_template, request, session, redirect, jsonify
 
 app = Flask(__name__)
@@ -30,6 +28,7 @@ app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 
 
 # Load the questions and check the file format.
+# ChatGPT helped check the JSON format and fix the options/answers lookup.
 def load_questions():
     with open(QUESTIONS_FILE, "r", encoding="utf-8") as file:
         questions = json.load(file)
@@ -38,8 +37,8 @@ def load_questions():
     for question, item in questions.items():
         if not isinstance(question, str) or not question.strip() or not isinstance(item, dict):
             raise ValueError
-        options = item.get
-        answers = item.get
+        options = item.get("options")
+        answers = item.get("answers")
         if not isinstance(options, list) or len(options) < 2:
             raise ValueError("Each question needs at least two options.")
         for option in options:
@@ -56,9 +55,9 @@ def load_questions():
             raise ValueError("Check the question's answers and fact.")
     return questions
 
-
+# Load the scores from previous games.
 def load_scores():
-    if not SCORES_FILE.exists():
+    if not os.path.exists(SCORES_FILE):
         return []
     with open(SCORES_FILE, "r", encoding="utf-8") as file:
         scores = json.load(file)
@@ -78,6 +77,7 @@ def load_scores():
     return scores
 
 
+# Work out the final results.
 def make_summary():
     correct = 0
     incorrect = 0
@@ -87,17 +87,31 @@ def make_summary():
         else:
             incorrect += 1
     total = len(session["selected_questions"])
-    return {
-        "quiz_id": session["quiz_id"], "user_id": session["user_id"],
-        "name": session["name"], "score": session["score"], "max_score": total * 15,
-        "correct": correct, "incorrect": incorrect,
-        "unanswered": total - correct - incorrect,
-        "seconds": round(session["end_time"] - session["start_time"], 2),
-        "mode": session["mode"], "reason": session["reason"],
-        "date": datetime.fromtimestamp(session["end_time"], timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    unanswered = total - correct - incorrect
+    total_time = session["end_time"] - session["start_time"]
+    total_time = round(total_time, 2)
+
+    # Turn the finish time into text for the history table.
+    finish_time = time.gmtime(session["end_time"])
+    date_text = time.strftime("%Y-%m-%d %H:%M UTC", finish_time)
+
+    summary = {
+        "quiz_id": session["quiz_id"],
+        "user_id": session["user_id"],
+        "name": session["name"],
+        "score": session["score"],
+        "max_score": total * 15,
+        "correct": correct,
+        "incorrect": incorrect,
+        "unanswered": unanswered,
+        "seconds": total_time,
+        "mode": session["mode"],
+        "reason": session["reason"],
+        "date": date_text
     }
+    return summary
 
-
+# ChatGPT helped save each result once and fix the file path handling.
 def save_score():
     # The quiz ID prevents refreshes/API retries from saving a result twice.
     scores = load_scores()
@@ -105,14 +119,13 @@ def save_score():
         if record["quiz_id"] == session["quiz_id"]:
             return False
     scores.append(make_summary())
-    temporary_file = SCORES_FILE.with_suffix(".tmp")
+    temporary_file = str(SCORES_FILE) + ".tmp"
     with open(temporary_file, "w", encoding="utf-8") as file:
         json.dump(scores, file, indent=4, ensure_ascii=False)
-    temporary_file.replace(SCORES_FILE)
+    os.replace(temporary_file, SCORES_FILE)
     return True
 
-
-# ---------- Scoring and timing ----------
+# Scoring and timing
 def calculate_points(user_answers, correct_answers, seconds):
     points = 0
     if set(user_answers) == set(correct_answers):
@@ -121,7 +134,7 @@ def calculate_points(user_answers, correct_answers, seconds):
             points += 5
     return points
 
-
+# End the quiz and save the result.
 def finish_quiz(reason):
     if not session.get("finished"):
         session["finished"] = True
@@ -131,23 +144,32 @@ def finish_quiz(reason):
             session["end_time"] = session["question_start"] + QUESTION_TIME_LIMIT
     save_score()
 
-
+# Check if this question has run out of time.
+# ChatGPT helped check the deadline in Python for requirement 3.
 def time_is_up():
-    if not session.get("quiz_id") or session.get("finished") or session["mode"] == "practice":
+    if not session.get("quiz_id"):
+        return False
+    if session.get("finished"):
+        return False
+    if session["mode"] == "practice":
         return False
     question_key = str(session["current_question"])
     if question_key in session["question_scores"]:
-        return False  # Feedback has no countdown; the next question has not started.
-    return time.time() - session["question_start"] >= QUESTION_TIME_LIMIT
+        return False  # The player is reading the feedback.
 
+    time_used = time.time() - session["question_start"]
+    if time_used >= QUESTION_TIME_LIMIT:
+        return True
+    return False
 
-# ---------- Home, visitor name and starting a new game ----------
+# Show the home page and remember the player's name.
+# ChatGPT helped use sessions for returning players and their history (requirement 1).
 @app.route('/', methods=['GET', 'POST'])
 def index():
     message = ""
     if request.method == 'POST':
         name = request.form.get("name", "").strip()
-        if not 1 <= len(name) <= 30 or not name.isprintable():
+        if name == "" or len(name) > 30 or not name.isprintable():
             message = "Please enter a name with 1 to 30 printable characters."
         else:
             session["name"] = name
@@ -161,12 +183,20 @@ def index():
         for record in load_scores():
             if record["user_id"] == session["user_id"]:
                 history.append(record)
-                best_score = max(best_score, record["score"])
+                if record["score"] > best_score:
+                    best_score = record["score"]
     history.reverse()
-    return render_template('index.html', history=history, best_score=best_score,
-                           message=message, time_limit=QUESTION_TIME_LIMIT)
+    return render_template(
+        'index.html',
+        history=history,
+        best_score=best_score,
+        message=message,
+        time_limit=QUESTION_TIME_LIMIT
+    )
 
 
+
+# Pick the questions and start a new game.
 @app.route('/start', methods=['POST'])
 def start():
     if "name" not in session:
@@ -196,6 +226,7 @@ def start():
 
 
 # Show the question and check the player's answer.
+# ChatGPT helped with answer validation and stopping repeated scoring.
 @app.route('/quiz', methods=['GET', 'POST'])
 @app.route('/quiz/<int:question_number>', methods=['GET', 'POST'])
 def quiz(question_number=0):
@@ -310,6 +341,7 @@ def next_question():
 
 
 # Show the final score and the answers to review.
+# ChatGPT helped build the final summary and question review.
 @app.route('/result')
 def result():
     if not session.get("quiz_id"):
@@ -348,6 +380,7 @@ def result():
 
 
 # Send the current question as JSON for the API requirement.
+# ChatGPT helped create both APIs below for questions and saved scores.
 @app.route('/api/questions', methods=['GET'])
 def api_questions():
     if not session.get("quiz_id"):
